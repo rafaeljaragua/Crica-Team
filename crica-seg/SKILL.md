@@ -121,12 +121,27 @@ Execute buscas direcionadas no código para cada categoria. O checklist completo
 - [ ] **Webhooks** (Stripe, Clerk, etc.) verificam assinatura criptográfica antes de processar.
 - [ ] **Headers & CORS**: CSP, HSTS, `X-Content-Type-Options`, `X-Frame-Options`/`frame-ancestors` e CORS restritivo.
 
-### 6. Privacidade & Conformidade (LGPD / GDPR)
+### 6. Privacidade, Conformidade Regulatória Global & Defesa do Consumidor
 - [ ] **Inventário de dados pessoais**: quais PII são coletados, onde ficam armazenados e com qual base legal (consentimento, execução de contrato, legítimo interesse).
 - [ ] **Consentimento de cookies**: scripts não essenciais (analytics, pixels, gravação de sessão) só carregam após consentimento; integração com Consent Mode v2 delegada ao `crica-seo`.
 - [ ] **Direitos do titular**: existe caminho para exportar e excluir os dados do usuário (exclusão de conta efetivamente remove ou anonimiza registros e arquivos de storage).
-- [ ] **Minimização em logs e ferramentas**: PII mascarada em logs, Sentry e gravações do Clarity.
+- [ ] **Minimização em logs e ferramentas**: PII mascarada em logs, Sentry e gravações do Clarity/Hotjar.
 - [ ] **Política de privacidade** publicada e coerente com os dados realmente coletados.
+
+### 7. Os 11 Riscos Jurídicos Globais & Defesa do Consumidor (Brasil / EUA / UE)
+- [ ] **1. Verificação de Idade (ECA Digital, LGPD Art. 14, COPPA, GDPR Art. 8)**: Em apps com menores ou conteúdo sensível, substituir a simples autodeclaração por salvaguardas reais de idade.
+- [ ] **2. Fontes Auto-Hospedadas (Precedente Munique / GDPR / Schrems II)**: Não carregar fontes externas via CDN (`fonts.googleapis.com`) em runtime para não vazar IPs; usar arquivos `.woff2` locais ou `next/font/local`.
+- [ ] **3. Gravação de Sessão Mascarada (CIPA / Wiretapping / LGPD)**: Hotjar/Clarity/FullStory rodando sob consentimento com máscara total de inputs (`mask-all-inputs`), blindando senhas, cartões, CPF e PII.
+- [ ] **4. E-mails com CNPJ e Unsubscribe (CAN-SPAM, Decreto 7.962/2013, CDC)**: Rodapé de e-mails com Razão Social, CNPJ (ou endereço físico) e link de opt-out funcional em 1 clique.
+- [ ] **5. Transparência em Assinaturas e Renovação (FTC Click-to-Cancel, CDC Art. 39/51)**: Preço, ciclo de cobrança e aviso de renovação automática posicionados junto ao botão de assinar; e-mail de aviso prévio de renovação e cancelamento self-service desimpedido.
+- [ ] **6. Canal de Denúncia de Direitos Autorais (DMCA Safe Harbor § 512, Marco Civil Art. 19)**: Para apps com conteúdo gerado por usuários (UGC), canal `/copyright` e fluxo de *Notice and Takedown* ágil.
+- [ ] **7. Acessibilidade Digital Anti-Litígio (ADA Title III, EAA, LBI Art. 63)**: Conformidade WCAG AA com foco em labels ARIA, navegação por teclado sem armadilhas e contraste mínimo de 4.5:1.
+- [ ] **8. Simetria de Cookies sem Dark Patterns (GDPR, CNIL, ANPD)**: Botão de `[Rejeitar Não Essenciais]` no primeiro nível do banner com o mesmo destaque do botão `[Aceitar]`.
+- [ ] **9. Reembolso de 7 Dias (CDC Art. 49) / 14 Dias (UE)**: Fluxo legal de estorno/cancelamento dentro do período de reflexão, sem cláusulas abusivas de não-reembolso.
+- [ ] **10. Exclusão Efetiva de Conta e Dados (Apple App Store, Google Play, LGPD Art. 18)**: Botão self-service dentro das configurações do app que executa exclusão/anonimização real dos registros e arquivos.
+- [ ] **11. Transparência de IA & Governança de LLMs (EU AI Act)**: Identificação clara de conteúdo de IA e garantia de não-treinamento com dados privados do usuário.
+
+
 
 ---
 

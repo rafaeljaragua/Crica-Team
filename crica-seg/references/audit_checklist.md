@@ -63,3 +63,46 @@ Use este documento como referência rápida durante as inspeções de código.
 - [ ] Usuário consegue exportar e excluir seus dados; exclusão de conta remove/anonimiza registros e arquivos de storage.
 - [ ] PII mascarada em logs, Sentry e gravações de sessão.
 - [ ] Política de privacidade publicada e coerente com os dados realmente coletados.
+
+---
+
+## 7. ⚖️ Os 11 Riscos Jurídicos Globais & Defesa do Consumidor (Brasil / EUA / UE)
+
+Estes 11 itens são os maiores alvos de processos judiciais, ações civis públicas (*class actions*) e sanções da ANPD, Senacon, Procons, FTC, lojas de aplicativos e autoridades europeias de proteção de dados:
+
+- [ ] **1. Verificação de Idade no Cadastro (ECA Digital, LGPD Art. 14, COPPA, GDPR Art. 8)**:
+  - Se o produto tiver acesso por menores ou conteúdo restrito, a mera autodeclaração (*"Tenho 18 anos"*) é insuficiente.
+  - Exigir data de nascimento verificável ou consentimento formal de responsáveis para menores de idade; produtos para crianças exigem fluxo COPPA estrito.
+- [ ] **2. Fontes Auto-Hospedadas no Próprio Servidor (Eliminação de Google Fonts CDN)**:
+  - Proibido carregar fontes via CDN externo (`fonts.googleapis.com`) em runtime para não transferir IP de visitantes para servidores dos EUA sem consentimento prévio (Precedente do Tribunal de Munique / GDPR / Schrems II).
+  - Usar fontes locais empacotadas (`@font-face` com `.woff2` locais ou `next/font/local`).
+- [ ] **3. Gravação de Sessão Mascarada & Sob Consentimento (CIPA, Hotjar, Clarity, FullStory)**:
+  - Todo gravador de sessão deve rodar apenas após aceite expresso no banner de cookies.
+  - Mascaramento rigoroso ativado em **todos** os campos de entrada (`mask-all-inputs`, `data-clarity-mask`), bloqueando gravação de senhas, cartões, CPF, nomes e dados sensíveis para evitar vazamento ativo de PII e processos de interceptação não autorizada (*wiretapping*).
+- [ ] **4. E-mails Transacionais e de Marketing com Identificação e Unsubscribe (CAN-SPAM, Decreto 7.962/2013, CDC)**:
+  - Todo e-mail enviado deve conter no rodapé: Razão Social, CNPJ (ou endereço físico postal válido) e link funcional de cancelamento de inscrição (*unsubscribe em 1 clique*).
+- [ ] **5. Transparência Radical em Assinaturas e Renovação Automática (FTC Click-to-Cancel, CDC Art. 39/51)**:
+  - Abaixo ou ao lado imediato do botão de assinar: destacar preço exato, periodicidade (mensal/anual), regra de renovação automática e facilidade de cancelamento.
+  - Enviar e-mail de aviso prévio (7 a 15 dias antes) em renovações periódicas (especialmente anuais).
+  - Cancelamento self-service descomplicado na interface da conta (proibido reter o usuário ou obrigar contato telefônico/chat com atendente).
+- [ ] **6. Canal de Denúncia de Direitos Autorais & Notice-and-Takedown (DMCA Safe Harbor § 512, Marco Civil Art. 19, DSA)**:
+  - Para plataformas que permitem upload ou publicação de conteúdo por usuários (UGC), manter página `/copyright` ou canal público para denúncias de infração de direitos autorais.
+  - Possuir procedimento operacional para suspender/remover o conteúdo infrator mediante notificação, resguardando a isenção de responsabilidade da plataforma.
+- [ ] **7. Acessibilidade Digital & Prevenção de Litígios (ADA Title III, European Accessibility Act - EAA, LBI Art. 63)**:
+  - Alvo massivo de ações judiciais nos EUA e exigência legal na UE e Brasil.
+  - Conformidade WCAG AA obrigatória: botões de ícone com `aria-label`, inputs associados a `<label>`, foco visível para teclado (`:focus-visible`), hierarquia semântica de headings e contraste mínimo de 4.5:1.
+- [ ] **8. Simetria de Consentimento de Cookies sem Dark Patterns (GDPR, CNIL, ANPD)**:
+  - Proibido esconder a recusa atrás de várias telas de preferências.
+  - O banner inicial de cookies deve oferecer a opção de recusar cookies não essenciais com a mesma facilidade e destaque do aceite: botões `[Aceitar]` e `[Rejeitar Não Essenciais]` no primeiro nível.
+- [ ] **9. Direito de Arrependimento e Reembolso em 7 Dias (CDC Art. 49) e 14 Dias na UE**:
+  - No Brasil, o prazo de reflexão de 7 dias para compras online é direito irrenunciável. Proibida cláusula de "não fazemos reembolso de forma alguma" para o mercado brasileiro.
+  - O sistema de billing e a política de termos de uso devem prever fluxo ágil de reembolso dentro do prazo legal.
+- [ ] **10. Exclusão Efetiva de Conta e Dados Self-Service (Apple App Store, Google Play, LGPD Art. 18, GDPR Art. 17)**:
+  - Obrigatório para aprovação em lojas de aplicativos e exigência de leis de privacidade.
+  - Nas configurações de perfil/conta, deve existir botão explícito: *"Excluir minha conta e dados"*. Proibido obrigar o usuário a enviar e-mail para suporte.
+  - A ação deve disparar a exclusão real (ou anonimização) no banco de dados e remoção de arquivos pessoais nos storages (S3/R2).
+- [ ] **11. Transparência de IA & Governança de Dados com LLMs (EU AI Act)**:
+  - Informar de forma transparente quando um conteúdo for gerado ou quando o usuário estiver interagindo com um assistente de IA.
+  - Garantir nos Termos de Uso e DPA (Data Processing Addendum) que os dados privados do usuário não são compartilhados para re-treinamento de modelos públicos por provedores terceiros (OpenAI/Anthropic/Google).
+
+

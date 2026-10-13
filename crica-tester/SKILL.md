@@ -116,21 +116,26 @@ Para cada formulário na aplicação:
    - O código faz `items?.map(...)` ou protege contra `undefined`?
    - Quando `items.length === 0`, há um componente de Empty State informativo com ação para criar o primeiro item?
 
-### Fase 4: Execução de Testes E2E (Simulação em Navegador)
+### Fase 4: Execução de Testes E2E, Acessibilidade & Salvaguardas Regulatórias
 Utilizar ferramentas de browser (ou scripts Playwright/Puppeteer/Browser Subagent) para executar as jornadas críticas:
-1. **Jornada de Autenticação**: Cadastro ➔ Recebimento de sessão ➔ Redirecionamento ➔ Logout.
-2. **Jornada de Criação (CRUD)**: Acessar listagem ➔ Clicar em "Novo" ➔ Preencher campos obrigatórios ➔ Salvar ➔ Validar se o novo item aparece na listagem sem reload forçado.
-3. **Jornada de Navegação**: Clicar em cada item do menu principal e verificar se o status HTTP e a renderização do título da página ocorrem sem erros no console (`window.onerror` limpo).
+1. **Jornada de Autenticação & Exclusão de Conta**: Cadastro ➔ Login ➔ Acesso a Configurações ➔ Teste do fluxo self-service de *"Excluir Conta e Dados"* (Apple/Google/LGPD Art. 18).
+2. **Jornada de Cookies & Rastreamento**: Acessar página em janela anônima ➔ Verificar se o banner de cookies possui botões simétricos `[Aceitar]` e `[Rejeitar Não Essenciais]` ➔ Clicar em "Rejeitar" e confirmar que scripts do Clarity/Hotjar não foram disparados.
+3. **Jornada de Criação (CRUD)**: Acessar listagem ➔ Clicar em "Novo" ➔ Preencher campos obrigatórios ➔ Salvar ➔ Validar se o novo item aparece na listagem sem reload forçado.
+4. **Jornada de Navegação & Acessibilidade Operacional (ADA Title III / WCAG AA)**:
+   - Percorrer a aplicação usando apenas o teclado (`Tab`, `Shift+Tab`, `Enter`, `Esc`).
+   - Validar que modais prendem o foco (*focus trap*) e fecham no `Esc`.
+   - Garantir que todos os botões de ícone tenham `aria-label` audível para leitores de tela e anel de foco visível.
 
 ### Fase 5: Relatório de Diagnóstico de QA
 O relatório deve agrupar as falhas por severidade:
-- 🔴 **Bloqueador / Crítico**: Botão essencial de checkout/cadastro inoperante; tela branca por erro de `TypeError`; rota 404 no menu principal.
-- 🟡 **Médio**: Falta de estado de loading em formulário (permite duplo clique); empty state sem mensagem amigável; link de rodapé com `href="#"`.
-- 🟢 **Baixo / Polimento**: Falta de foco visível na navegação por teclado; falta de `aria-label` em botão que contém apenas ícone.
+- 🔴 **Bloqueador / Crítico**: Botão essencial de checkout/cadastro inoperante; tela branca por erro de `TypeError`; rota 404 no menu principal; falta de botão de exclusão de conta em apps de lojas.
+- 🟡 **Médio / Risco Regulatório**: Falta de estado de loading em formulário; empty state sem CTA; botão de ícone sem `aria-label` ou foco invisível no teclado (risco de processo ADA/EAA); banner de cookies sem opção de rejeitar no 1º nível; ausência de aviso de renovação automática no checkout.
+- 🟢 **Baixo / Polimento Estético**: Transição ligeiramente truncada; micro-ajuste de espaçamento sem impacto funcional.
 
 ### Fase 6 & 7: Correção Cirúrgica & Revalidação
-- Implementar handlers reais, conectar rotas faltantes, adicionar guards de `?.` e `length === 0`, e habilitar feedbacks visuais.
+- Implementar handlers reais, conectar rotas faltantes, adicionar guards de `?.` e `length === 0`, habilitar feedbacks visuais e corrigir atributos ARIA/foco.
 - Re-executar os testes para certificar que nada do ecossistema quebrou.
+
 
 ---
 

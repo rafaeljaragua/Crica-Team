@@ -79,7 +79,8 @@ Estruturar o CSS / Tailwind com os tokens semânticos definidos em [design_syste
 - **Elevação e Sombras**: sombras multicamadas suaves no claro; no escuro, elevação por superfícies mais claras e bordas sutis.
 - **Movimento**: `--duration-fast/base/slow` e `--ease-out`, respeitando `prefers-reduced-motion`.
 
-### Fase 2: Hierarquia & Escala Tipográfica
+### Fase 2: Hierarquia, Escala Tipográfica & Fontes Auto-Hospedadas
+- **Fontes Auto-Hospedadas (Privacidade & Performance)**: Proibido carregar fontes via CDN externa (`fonts.googleapis.com`) diretamente no HTML ou CSS para não vazar IP de usuários (Risco GDPR / Tribunal de Munique). Sempre empacotar fontes localmente (`next/font/local` ou arquivos `.woff2` servidos localmente com `@font-face`).
 - Substituir fontes genéricas do navegador por famílias modernas de alto padrão (ex: *Inter, Geist, Plus Jakarta Sans, Outfit*).
 - Manter a escala proporcional estrita dos tokens:
   - `Display`: 48px (32px no mobile), peso 700, line-height 1.1
@@ -89,15 +90,21 @@ Estruturar o CSS / Tailwind com os tokens semânticos definidos em [design_syste
   - `Body`: 16px (14px em UI densa), peso 400/500, line-height 1.5 a 1.55
   - `Caption / Microcopy`: 12px, peso 500, line-height 1.4
 
-### Fase 3: Contraste & Acessibilidade (WCAG AA)
+### Fase 3: Contraste, Semântica & Acessibilidade Anti-Litígio (ADA / EAA / LBI / WCAG AA)
 - Verificar a proporção mínima de contraste de 4.5:1 para texto normal e 3:1 para texto grande.
-- Garantir que estados de foco (`:focus-visible`) tenham anel de destaque claro sem comprometer a beleza da interface.
+- **Botões e Ícones**: Todo botão que contenha apenas ícone DEVE conter `aria-label` descritivo obrigatório.
+- **Navegação por Teclado**: Garantir que estados de foco (`:focus-visible`) tenham anel de destaque visível (`outline` / `ring`) sem armadilhas de tabulação.
+- **Formulários**: Todos os `<input>` devem possuir `<label>` associado ou `aria-labelledby`, e mensagens de erro inline vinculadas via `aria-describedby`.
 
-### Fase 4: Micro-Interações & Dinâmica Cinética
+### Fase 4: Micro-Interações, Transparência de Checkout & Banner de Cookies Simétrico
 - **Botões**: Transições de `--duration-fast` (120ms) na cor de fundo e escala sutil (`active:scale-[0.98]`).
+- **Checkout & Assinaturas Transparentes (FTC / CDC)**: Ao desenhar botões de assinatura ou checkout, exibir obrigatoriamente logo abaixo ou ao lado: valor claro, periodicidade de cobrança, aviso explícito de renovação automática e texto de cancelamento desimpedido (proibido ocultar termos em letras minúsculas ou esconder a recorrência).
+- **Banner de Cookies Simétrico (Anti-Dark Pattern / GDPR / ANPD)**: Quando desenhar banners de consentimento, fornecer botões `[Aceitar]` e `[Rejeitar Não Essenciais]` com a mesma hierarquia visual e facilidade no primeiro nível (proibido forçar o usuário a entrar em modais complexos para recusar rastreamento).
 - **Cards Interativos**: Elevação leve de sombra e sutil clareamento de borda no hover.
 - **Modais e Drawers**: Fade-in + scale-in suave (`--duration-slow`, `--ease-out`), nunca aparição seca em 0ms.
 - **Skeletons de Carregamento**: Efeito shimmer com gradiente pulsante em vez de telas em branco durante fetches.
+
+
 
 ### Fase 5 & 6: Responsividade Real & Aplicação
 - Garantir que tabelas de dados se convertam em listas de cards em telas < 768px.

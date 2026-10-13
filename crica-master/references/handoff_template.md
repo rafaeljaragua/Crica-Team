@@ -1,39 +1,52 @@
-# Template de Handoff & Quadro da Squad
+# Template de Handoff & Quadro da Squad com Governança de Qualidade
 
-Toda skill, ao concluir sua etapa dentro de uma missão orquestrada pelo `crica-master`, emite um bloco de handoff neste formato. Ele é o **único insumo** que a próxima skill pode assumir como verdade.
+Toda skill, ao concluir sua etapa dentro de uma missão orquestrada pelo `crica-master`, emite um bloco de handoff neste formato.
+O `crica-master` é obrigado a auditar este bloco: se faltarem evidências fáticas ou se houver pontas soltas (erros óbvios, botões sem handler, falta de estados de erro), **o Master emite um parecer de VETO e devolve a etapa para retrabalho**.
 
 ---
 
-## 📦 Bloco de Handoff
+## 📦 Bloco de Handoff com Evidências
 
 ```markdown
 ### 🔁 Handoff: crica-<origem> → crica-<destino>
 
-**Status da etapa**: ✅ Concluída / ⚠️ Concluída com ressalvas / ⛔ Bloqueada
+**Status da etapa**: 
+- [ ] ✅ Concluída com Evidências Fáticas
+- [ ] ⚠️ Concluída com Ressalvas Justificadas
+- [ ] ⛔ Bloqueada / Necessita Escalada
 
 **Entradas consumidas**
-- (Handoff anterior, arquivos lidos, decisões do usuário)
+- (Handoff anterior, arquivos analisados, decisões do usuário)
 
 **Artefatos produzidos ou alterados**
-- `caminho/do/arquivo.ts` — o que mudou (1 linha)
+- `caminho/do/arquivo.ts` — descrição exata da modificação
 - `implementation_plan.md` / relatório — se aplicável
 
-**Decisões tomadas**
-- (Escolhas técnicas ou de produto que a próxima skill deve respeitar)
+**Evidências fáticas da entrega (Obrigatório)**
+- **Linhas/Trechos auditados**: (Ex: `UserButton.tsx:24-48` implementou estado de loading e desabilitação)
+- **Comandos/Testes executados**: (Ex: `npm run lint` ou `npx vitest run` com exit code 0)
+- **Estados cobertos**: (Ideal ✅ | Loading ✅ | Empty ✅ | Error ✅)
 
-**Contratos expostos à próxima skill**
-- (Schemas, tipos, endpoints, tokens, textos aprovados, rotas)
+**Casos de borda e tratamento de erros verificados**
+- (Como a entrega se comporta se a rede falhar, se o dado vier nulo ou se o input for inválido)
 
-**Pendências & riscos**
-- (O que ficou fora do escopo, dúvidas abertas, débitos introduzidos)
+**Decisões tomadas & Contratos expostos**
+- (Schemas Zod, interfaces TypeScript, tokens CSS, rotas criadas)
 
-**Portão de DoD desta skill**: ✅ Atendido / ⛔ Bloqueado / N/A — motivo
+**Pendências, riscos & débitos identificados**
+- (Nenhum / Listar estritamente o que ficou pendente e por que)
+
+---
+
+### 🧐 Parecer de Auditoria do crica-master:
+- **Status do Gate**: 🟢 Aprovado para avanço | 🔴 VETADO - Devolvido para Retrabalho
+- **Justificativa / Apontamento de Veto**: (Se vetado, listar exatamente o arquivo e a correção cirúrgica necessária)
 ```
 
-### Regras
-1. **Sem premissas implícitas**: se algo não está no handoff, a próxima skill pergunta ao master em vez de supor.
-2. **Concisão**: no máximo ~20 linhas. Detalhes ficam nos artefatos linkados.
-3. **Bloqueio propaga**: um handoff `⛔ Bloqueada` faz o master acionar a Fase 4 (Remoção de Impedimentos) antes de seguir.
+### Regras de Ouro
+1. **Sem premissas implícitas**: se algo não está no handoff com evidência, a próxima skill não assume que existe.
+2. **Proibido "auto-aprovação cega"**: o Master nunca carimba avanço sem inspecionar as evidências fáticas.
+3. **Loop de Veto**: em caso de 🔴 VETADO, o Master reabre a fase da skill de origem com o apontamento antes de tocar a esteira adiante.
 
 ---
 
@@ -43,14 +56,19 @@ Toda skill, ao concluir sua etapa dentro de uma missão orquestrada pelo `crica-
 # Squad Board — <nome da missão>
 
 **Playbook**: Feature / Auditoria 360° / Crise / Growth
-**Objetivo**: <1 frase>
+**Objetivo**: <1 frase executiva>
+**Auditor Geral**: crica-master (Padrão Sênior / Tolerância Zero a Amadorismo)
 
-| # | Skill | Etapa | Status | Portão DoD |
-| :- | :--- | :--- | :--- | :--- |
-| 1 | crica-po | User stories + Gherkin | ✅ Concluída | ✅ |
-| 2 | crica-copy | Microcopy da feature | 🔄 Em andamento | — |
-| 3 | crica-arch | Schema + services | ⏳ Pendente | — |
-| 4 | crica-seo | — | N/A (sem páginas públicas) | N/A |
+| # | Skill | Etapa | Status | Evidência Principal | Portão DoD |
+| :- | :--- | :--- | :--- | :--- | :--- |
+| 1 | crica-po | User stories + Gherkin + 4 Estados | ✅ Aprovado | spec_v1.md com 8 cenários | ✅ Aprovado |
+| 2 | crica-arch | Schemas Zod + Services | ✅ Aprovado | auth.schema.ts:1-42 | ✅ Aprovado |
+| 3 | crica-ui | Componentes + Microcopy | 🔄 Em andamento | — | — |
+| 4 | crica-tester | E2E + Smoke Gate | ⏳ Pendente | — | — |
+| 5 | crica-ops | Build + Typecheck | ⏳ Pendente | — | — |
+
+## Ciclos de Retrabalho (Rework Log)
+- (Ex: *crica-ui vetado na rodada 1 por botão sem disabled durante mutation. Corrigido na rodada 2.*)
 
 ## Impedimentos ativos
 - (nenhum)
